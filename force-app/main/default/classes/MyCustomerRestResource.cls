@@ -1,6 +1,6 @@
-@RestResource(urlMapping='/my_service/customer/*')
+@RestResource(urlMapping='/soforce/demorest/customer/*')
 global with sharing class MyCustomerRestResource {
-    public static final String BaseCustomerURI = '/my_service/customer/';
+    public static final String BaseCustomerURI = '/soforce/demorest/customer/';
 
     global class Address {
         public String addressType; /* shipping, billing */
@@ -79,5 +79,29 @@ global with sharing class MyCustomerRestResource {
 
         return newCustomer;
     }
-    
+
+    @HttpPut
+    global static void doPut() {
+        System.debug('MyCustomerRestResource.doPut');
+        RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+        String customerId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
+
+        // Get partition
+        Cache.SessionPartition sessionPart = Cache.Session.getPartition('local.MyServiceCache');
+
+        if (sessionPart.contains(customerId)) {
+            String jsonString = req.requestBody.toString();
+            Customer myCustomer = (Customer)JSON.deserialize(jsonString, Customer.class);
+            myCustomer.id = customerId;
+
+            sessionPart.put(myCustomer.id, myCustomer);
+          
+            res.addHeader('Content-Type', 'application/json;charset=UTF-8');
+            res.responseBody = Blob.valueOf(JSON.serialize(myCustomer));
+        } else {
+            res.statusCode = 404;
+            res.responseBody = Blob.valueOf('The specified customer is not found.');
+        }
+    }
 }
