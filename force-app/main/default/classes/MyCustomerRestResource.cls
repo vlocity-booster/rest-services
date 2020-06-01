@@ -14,7 +14,7 @@ global with sharing class MyCustomerRestResource {
         public String id;
         public String name;
         public String phone;
-        public String email;
+        public String website;
 
         public Address[] addresses;
     }   

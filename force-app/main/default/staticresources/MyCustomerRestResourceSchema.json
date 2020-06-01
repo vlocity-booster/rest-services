@@ -1,0 +1,149 @@
+{
+  "swagger" : "2.0",
+  "schemes" : [ "https" ],
+  "info" : {
+    "description" : "This is a simple customer demo Rest API",
+    "version" : "1.0.0",
+    "title" : "Simple Customer API"
+  },
+  "tags" : [ {
+    "name" : "CustomerDemoAPI"
+  } ],
+  "paths" : {
+    "/soforce/demorest/customer/{customerId}" : {
+      "get" : {
+        "summary" : "retrieves a customer",
+        "operationId" : "getCustomer",
+        "description" : "Retrieve a customer in the system\n",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "customerId",
+          "description" : "Id of the customer",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "$ref" : "#/definitions/Customer"
+            }
+          },
+          "404" : {
+            "description" : "bad input parameter"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "updates a customer",
+        "operationId" : "putCustomer",
+        "description" : "Updates an existing customer in the system",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "customerId",
+          "description" : "Id of the customer",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "customer",
+          "description" : "customer to add",
+          "schema" : {
+            "$ref" : "#/definitions/Customer"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "item created",
+            "schema" : {
+              "$ref" : "#/definitions/Customer"
+            }
+          },
+          "400" : {
+            "description" : "invalid input, object invalid"
+          },
+          "409" : {
+            "description" : "an existing item already exists"
+          }
+        }
+      }
+    },
+    "/soforce/demorest/customer" : {
+      "post" : {
+        "summary" : "adds a customer",
+        "operationId" : "addCustomer",
+        "description" : "Adds a customer to the system",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "customer",
+          "description" : "customer to add",
+          "schema" : {
+            "$ref" : "#/definitions/Customer"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "item created",
+            "schema" : {
+              "$ref" : "#/definitions/Customer"
+            }
+          },
+          "400" : {
+            "description" : "invalid input, object invalid"
+          },
+          "409" : {
+            "description" : "an existing item already exists"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Customer" : {
+      "required" : [ "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "website" : {
+          "type" : "string"
+        },
+        "addresses" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Address"
+          }
+        }
+      }
+    },
+    "Address" : {
+      "required" : [ "addressType" ],
+      "properties" : {
+        "addressType" : {
+          "type" : "string"
+        },
+        "street" : {
+          "type" : "string"
+        },
+        "city" : {
+          "type" : "string"
+        },
+        "province" : {
+          "type" : "string"
+        },
+        "postCode" : {
+          "type" : "string"
+        }
+      }
+    }
+  },
+  "basePath" : "/services/apexrest"
+}
