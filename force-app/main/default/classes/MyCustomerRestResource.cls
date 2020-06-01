@@ -14,7 +14,7 @@ global with sharing class MyCustomerRestResource {
         public String id;
         public String name;
         public String phone;
-        public String email;
+        public String website;
 
         public Address[] addresses;
     }   
@@ -40,8 +40,10 @@ global with sharing class MyCustomerRestResource {
         // Get partition
         Cache.SessionPartition sessionPart = Cache.Session.getPartition('local.MyServiceCache');
 
-        if (sessionPart.contains(customerId)) {
-        
+        if (customerId == 'schema') {
+            res.addHeader('Content-Type', 'application/json;charset=UTF-8');
+
+        } else if (sessionPart.contains(customerId)) {        
             Customer myCustomer = (Customer)sessionPart.get(customerId);
             res.addHeader('Content-Type', 'application/json;charset=UTF-8');
             res.responseBody = Blob.valueOf(JSON.serialize(myCustomer));
