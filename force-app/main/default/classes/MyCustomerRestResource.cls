@@ -64,8 +64,10 @@ global with sharing class MyCustomerRestResource {
 
     
     @HttpPost
-    global static Customer doPost() {
+    global static void doPost() {
         RestRequest req = RestContext.request;
+        RestResponse res = RestContext.response;
+
         String jsonString = req.requestBody.toString();
         Customer newCustomer = (Customer)JSON.deserialize(jsonString, Customer.class);
         
@@ -77,7 +79,9 @@ global with sharing class MyCustomerRestResource {
         System.debug(newCustomer);
         orgPart.put(newCustomer.id, newCustomer);
 
-        return newCustomer;
+        res.addHeader('Content-Type', 'application/json;charset=UTF-8');
+        res.responseBody = Blob.valueOf(JSON.serialize(newCustomer));
+        res.statusCode = 201;
     }
 
     @HttpPut
