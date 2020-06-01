@@ -38,7 +38,7 @@ global with sharing class MyCustomerRestResource {
         RestResponse res = RestContext.response;
         String customerId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
         // Get partition
-        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.MyServiceCache');
+        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.SoforceCache');
 
         if (orgPart.contains(customerId)) {
         
@@ -57,7 +57,7 @@ global with sharing class MyCustomerRestResource {
         RestRequest req = RestContext.request;
         RestResponse res = RestContext.response;
         String customerId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
-        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.MyServiceCache');
+        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.SoforceCache');
         orgPart.remove(customerId);
     }
 
@@ -71,7 +71,7 @@ global with sharing class MyCustomerRestResource {
         
         newCustomer.id = generateId();
         
-        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.MyServiceCache');
+        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.SoforceCache');
              
         // Add cache value to the partition
         System.debug(newCustomer);
@@ -88,7 +88,7 @@ global with sharing class MyCustomerRestResource {
         String customerId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
 
         // Get partition
-        Cache.SessionPartition sessionPart = Cache.Session.getPartition('local.MyServiceCache');
+        Cache.OrgPartition sessionPart = Cache.Org.getPartition('local.SoforceCache');
 
         if (sessionPart.contains(customerId)) {
             String jsonString = req.requestBody.toString();
