@@ -38,11 +38,11 @@ global with sharing class MyCustomerRestResource {
         RestResponse res = RestContext.response;
         String customerId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
         // Get partition
-        Cache.SessionPartition sessionPart = Cache.Session.getPartition('local.MyServiceCache');
+        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.MyServiceCache');
 
-        if (sessionPart.contains(customerId)) {
+        if (orgPart.contains(customerId)) {
         
-            Customer myCustomer = (Customer)sessionPart.get(customerId);
+            Customer myCustomer = (Customer)orgPart.get(customerId);
             res.addHeader('Content-Type', 'application/json;charset=UTF-8');
             res.responseBody = Blob.valueOf(JSON.serialize(myCustomer));
         } else {
@@ -57,8 +57,8 @@ global with sharing class MyCustomerRestResource {
         RestRequest req = RestContext.request;
         RestResponse res = RestContext.response;
         String customerId = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
-        Cache.SessionPartition sessionPart = Cache.Session.getPartition('local.MyServiceCache');
-        sessionPart.remove(customerId);
+        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.MyServiceCache');
+        orgPart.remove(customerId);
     }
 
 
@@ -71,11 +71,11 @@ global with sharing class MyCustomerRestResource {
         
         newCustomer.id = generateId();
         
-        Cache.SessionPartition sessionPart = Cache.Session.getPartition('local.MyServiceCache');
+        Cache.OrgPartition orgPart = Cache.Org.getPartition('local.MyServiceCache');
              
         // Add cache value to the partition
         System.debug(newCustomer);
-        sessionPart.put(newCustomer.id, newCustomer);
+        orgPart.put(newCustomer.id, newCustomer);
 
         return newCustomer;
     }
